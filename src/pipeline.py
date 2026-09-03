@@ -6,8 +6,8 @@ import logging
 import pandas as pd
 import requests
 from dotenv import load_dotenv
-
-
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # ----------------------------
 # Config
 # ----------------------------

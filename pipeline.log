@@ -53,3 +53,20 @@
 2026-09-03 10:29:43,439 - INFO - Processing Bogota
 2026-09-03 10:29:44,433 - INFO - Processing Santiago
 2026-09-03 10:29:46,050 - INFO - Process completed
+2026-09-03 10:35:18,188 - INFO - Cities loaded successfully
+2026-09-03 10:35:18,188 - INFO - Processing New York
+2026-09-03 10:35:19,545 - INFO - Processing London
+2026-09-03 10:35:20,567 - INFO - Processing Paris
+2026-09-03 10:35:21,898 - INFO - Processing Tokyo
+2026-09-03 10:35:23,202 - INFO - Processing Berlin
+2026-09-03 10:35:24,474 - INFO - Processing Madrid
+2026-09-03 10:35:25,593 - INFO - Processing Rome
+2026-09-03 10:35:26,897 - INFO - Processing Toronto
+2026-09-03 10:35:27,968 - INFO - Processing Sydney
+2026-09-03 10:35:29,255 - INFO - Processing Singapore
+2026-09-03 10:35:30,315 - INFO - Processing San Jose
+2026-09-03 10:35:31,620 - INFO - Processing Mexico City
+2026-09-03 10:35:32,661 - INFO - Processing Buenos Aires
+2026-09-03 10:35:33,711 - INFO - Processing Bogota
+2026-09-03 10:35:35,172 - INFO - Processing Santiago
+2026-09-03 10:35:36,518 - INFO - Process completed
