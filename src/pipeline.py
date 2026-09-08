@@ -33,20 +33,34 @@ def normalize_city(city):
 
 
 # ----------------------------
-# Read CSV
+# Read CSV data from cities.csv file
 # ----------------------------
 def load_cities():
     df = pd.read_csv("data/cities.csv")
 
     df["city"] = df["city"].apply(normalize_city)
 
-    logging.info("Cities loaded successfully")
+    #logging.info("Cities loaded successfully")
+    logging_function("Cities loaded successfully", level="INFO")
 
     return df
 
+#------------------------------
+# Logging function
+#------------------------------
+
+def logging_function(message, level):
+    if level == "INFO":
+        logging.info(message)
+    elif level == "WARNING":
+        logging.warning(message)
+    elif level == "ERROR":
+        logging.error(message)
+    else:
+        logging.debug(message)
 
 # ----------------------------
-# API Call
+# API Call requests
 # ----------------------------
 def get_weather(lat, lon):
     url = "https://api.open-meteo.com/v1/forecast"
@@ -73,6 +87,7 @@ def get_weather(lat, lon):
 # Transform data
 # ----------------------------
 def build_weather_df(city, data):
+    #  query parameters to fetch
     df = pd.DataFrame(
         {
             "time": data["hourly"]["time"],
@@ -94,16 +109,18 @@ def build_weather_df(city, data):
 # Main Process
 # ----------------------------
 def main():
-
+    #call load_cities() function to load cities from CSV
     cities = load_cities()
-
+    #create an empty list to store weather data for all cities
     all_weather = []
 
+    #Sequential loop to request data for all 16 cities contained in the cities.csv file
+    
     for _, row in cities.iterrows():
 
         city = row["city"]
 
-        logging.info(f"Processing {city}")
+        logging_function(f"Processing {city}", level="INFO")
 
         weather_json = get_weather(
             row["latitude"],
@@ -147,7 +164,7 @@ def main():
         indent=4,
     )
 
-    logging.info("Process completed")
+    logging_function("Process completed", level="INFO")
 
     print("Report created successfully")
 
