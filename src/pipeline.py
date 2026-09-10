@@ -1,33 +1,32 @@
+# to handle environment variables
 import os
-
 # regular expressions library for string manipulation
 import re
-
 # import json
 import logging
-
+# to handle Excel spreadsheets
 import pandas as pd
+# to make HTTP requests to APIs
 import requests
+# to load environment variables from a .env file
 from dotenv import load_dotenv
+# to disable SSL warnings for requests
 import urllib3
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # ----------------------------
-# Config
+# Configuration and Logging
 # ----------------------------
 load_dotenv()
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-
 logging.basicConfig(
-    filename="pipeline.log",
+   filename="pipeline.log",
     level=LOG_LEVEL,
     format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
-
 # ----------------------------
-# Clean city names incorrect characters and formatting
+# PHASE 2 - Input Processing and cleaning format data
 # ----------------------------
 def normalize_city(city):
     # remove any leading whietespaces or special characters
@@ -43,7 +42,7 @@ def normalize_city(city):
 
 
 # ----------------------------
-# Read CSV data from cities.csv file
+# PHASE 2 - Data Loading
 # ----------------------------
 def load_cities():
     # It loads entire csv file into df variable
@@ -52,16 +51,13 @@ def load_cities():
     df["city"] = df["city"].apply(normalize_city)
 
     # logging.info("Cities loaded successfully")
-    logging_function("Cities loaded successfully", level="INFO")
+    logging_function("Cities loaded successfully", LOG_LEVEL)
 
     return df
 
-
 # ------------------------------
-# Logging function PHASE 2
+# PHASE 2 - Logging Function
 # ------------------------------
-
-
 def logging_function(message, level):
     if level == "INFO":
         logging.info(message)
@@ -72,9 +68,8 @@ def logging_function(message, level):
     else:
         logging.debug(message)
 
-
 # ----------------------------
-# API Call requests PHASE 3
+# PHASE 3 - API Extraction
 # ----------------------------
 def get_weather(lat, lon):
     url = "https://api.open-meteo.com/v1/forecast"
@@ -91,9 +86,8 @@ def get_weather(lat, lon):
     # It returns the weather according to latitude and longitude in JSON format
     return response.json()
 
-
 # ----------------------------
-# Transform data PHASE 4
+# PHASE 4 - Data Transformation & Pandas Aggregation
 # ----------------------------
 def build_weather_df(city, data):
     # It receives the city name and the weather data in JSON format, and it builds a DataFrame with the relevant information
@@ -115,7 +109,7 @@ def build_weather_df(city, data):
 
 
 # ---------------------------------
-# Export to Excel and JSON PHASE 5
+# PHASE 5 - Automated Reporting
 # ---------------------------------
 def export_excel(weather, filename_xlsx, filename_json):
     summary = (
@@ -158,7 +152,7 @@ def main():
     for _, row in cities.iterrows():
         city = row["city"]
 
-        logging_function(f"Processing {city}", level="INFO")
+        logging_function(f"Processing {city}", LOG_LEVEL)
         # Call get_weather() function to fetch weather data for the current city using its latitude and longitude
         weather_json = get_weather(
             row["latitude"],
@@ -176,11 +170,11 @@ def main():
     weather = pd.concat(all_weather)
 
     # Set the file names for the Excel and JSON reports, and call the export_excel() function to generate the reports based on the collected weather data.
-    file_name_xlsx = "reports/weather_report.xlsx"
-    file_name_json = "reports/weather_alerts.json"
+    file_name_xlsx = os.getenv("FILE_NAME_XLSX")
+    file_name_json = os.getenv("FILE_NAME_JSON")
     export_excel(weather, file_name_xlsx, file_name_json)
 
-    logging_function("Process completed", level="INFO")
+    logging_function("Process completed", LOG_LEVEL)
     print("Report created successfully")
 
 

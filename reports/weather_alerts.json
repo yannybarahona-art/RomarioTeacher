@@ -1,92 +1,92 @@
 [
     {
         "city":"Madrid",
+        "date":1789084800000,
+        "max_temperature":30.3,
+        "total_precipitation":0.0
+    },
+    {
+        "city":"Madrid",
         "date":1789171200000,
-        "max_temperature":31.1,
+        "max_temperature":30.9,
         "total_precipitation":0.0
     },
     {
         "city":"Madrid",
         "date":1789257600000,
-        "max_temperature":31.6,
+        "max_temperature":31.8,
         "total_precipitation":0.0
     },
     {
         "city":"Madrid",
         "date":1789344000000,
-        "max_temperature":33.2,
+        "max_temperature":33.8,
         "total_precipitation":0.0
     },
     {
         "city":"Madrid",
         "date":1789430400000,
-        "max_temperature":35.7,
+        "max_temperature":35.5,
         "total_precipitation":0.0
     },
     {
         "city":"Madrid",
         "date":1789516800000,
-        "max_temperature":33.9,
+        "max_temperature":32.8,
         "total_precipitation":0.0
     },
     {
         "city":"New York",
         "date":1788998400000,
-        "max_temperature":32.3,
+        "max_temperature":31.8,
         "total_precipitation":0.0
     },
     {
         "city":"Rome",
         "date":1789430400000,
+        "max_temperature":30.9,
+        "total_precipitation":0.0
+    },
+    {
+        "city":"Rome",
+        "date":1789516800000,
         "max_temperature":30.6,
         "total_precipitation":0.0
     },
     {
         "city":"Singapore",
-        "date":1788998400000,
-        "max_temperature":32.8,
-        "total_precipitation":12.8
-    },
-    {
-        "city":"Singapore",
-        "date":1789084800000,
-        "max_temperature":30.8,
-        "total_precipitation":5.0
-    },
-    {
-        "city":"Singapore",
         "date":1789171200000,
-        "max_temperature":30.6,
-        "total_precipitation":3.7
+        "max_temperature":30.4,
+        "total_precipitation":2.8
     },
     {
         "city":"Singapore",
         "date":1789257600000,
-        "max_temperature":31.6,
-        "total_precipitation":0.9
+        "max_temperature":31.3,
+        "total_precipitation":1.0
     },
     {
         "city":"Singapore",
         "date":1789344000000,
-        "max_temperature":31.3,
-        "total_precipitation":2.5
+        "max_temperature":30.8,
+        "total_precipitation":2.0
     },
     {
         "city":"Singapore",
         "date":1789430400000,
-        "max_temperature":31.9,
+        "max_temperature":31.8,
         "total_precipitation":0.0
     },
     {
         "city":"Singapore",
         "date":1789516800000,
-        "max_temperature":32.6,
+        "max_temperature":32.3,
         "total_precipitation":0.3
     },
     {
         "city":"Tokyo",
         "date":1789344000000,
         "max_temperature":30.1,
-        "total_precipitation":0.6
+        "total_precipitation":0.5
     }
 ]
