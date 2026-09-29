@@ -108,6 +108,21 @@ class BankAccount:
             raise ValueError("Initial balance cannot be negative.")
         account_number_generated = cls.generate_account_number(cls)
         return cls(account_number_generated, balance)
+    
+    def transfer(self,target_account, amount):
+        if amount <=0:
+           logging.error(f"The amount can't be negative {amount}")
+           raise ValueError("Deposit amount must be positive.")
+
+        if self.balance < amount:
+            raise InsufficientFundsError("Insufficient funds for withdrawal.", amount)
+
+        self.balance -= amount
+        target_account.balance += amount
+        print("Transfer successfully...")
+           
+        
+        
         
 class Customer:
     user_id_count = 0
@@ -151,6 +166,14 @@ class Customer:
             if customer._name == name:
                 return customer
         return None
+    def find_account(account_number):
+        for customer in Customer.all_customer:
+            for account in customer._Customer__accounts:
+                if account.account_number == account_number:
+                    return account
+        return None
+
+    
 if __name__ == "__main__":
     try:
         while True:
@@ -175,17 +198,43 @@ if __name__ == "__main__":
                 print(f"Account #{account._account_number} created for user: {user._name}.")
             elif opcion == "2":
                 print("DEPOSIT")
-                #account.deposit(500)
+                name = input("Add your name: ")
+                deposit=int(input("Add your deposit: "))
+                account.deposit(deposit)
             elif opcion == "3":
-                print("TRANSFER")
+                print("              YOU HAVE SELECTED TRANSFER!")
+                #name=input("Enter the user name: ")
+                #amount=int(input("Enter the amount to transfer: "))
+                #account_from=int(input("Enter the account from to transfer: "))
+                #account_target=int(input("Enter the account target to transfer: "))
+
+                #account1 = BankAccount(account_from)
+                #account_target = BankAccount(9876543210, 100)
+
+                #account1.transfer(account_target,100)
+                #print(f"New balance from :  {account1.balance}")
+                #print(f"New balance target :  {account_target.balance}")
+
+
+                account_from = int(input("Enter source account number: "))
+                account_target = int(input("Enter target account number: "))
+                amount = int(input("Enter amount: "))
+
+                source_account = Customer.find_account(account_from)
+                target_account = Customer.find_account(account_target)
+
+                if source_account and target_account:
+                    source_account.transfer(target_account, amount)
+                else:
+                    print("Account not found")
+
             elif opcion == "4":
-                print("WITHDRAW")
-                #account.withdraw(50)
+                print("              YOU HAVE SELECTED WITHDRAW!")
+                withdraw=int(input("Please enter the withdraw: "))
+                account.withdraw(withdraw)
             elif opcion == "5":
                 print("              YOU HAVE SELECTED VIEW BALANCE!")
-    
                 name = input("Add your name: ")
-
                 for customer in Customer.all_customer:
                     if customer._name == name:
                         print(f"Balance: {customer.get_total_balance()}")
@@ -194,6 +243,7 @@ if __name__ == "__main__":
                     print("Customer not found.")
 
             elif opcion == "6":
+                print("BANKING SYSTEM EXISTING.....")
                 break
                 #account.convert_currency("EUR", 0.85)
                 user=Customer("John Doe", "2008-09-28")
