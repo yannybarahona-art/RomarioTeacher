@@ -49,7 +49,7 @@ class BankAccount:
            raise ValueError("Balance cannot be negative.")
         self.__balance = value
         logging.info(f"Balance updated to: {value}")
-    @staticmethod    
+      
     def is_valid_account_number(self, account_number):
         return isinstance(account_number, int) and len(str(account_number)) == 10
     @staticmethod
@@ -62,9 +62,7 @@ class BankAccount:
             print(f"Initial balance {initial_balance} is less than minimum required balance {self._minimum_balance}")
             logging.error(f"Initial balance {initial_balance} is less than minimum required balance {self._minimum_balance}")
             raise ValueError("Initial balance cannot be less than minimum required balance.")
-
-
-
+    
     def show_balance(self):
         print(f"Balance: {self.__balance}")
 
@@ -104,7 +102,7 @@ class BankAccount:
         print(f"Converted balance from {self._currency} to {target_currency}. New balance: {balance_converted}")
     @classmethod
     def create_saving(cls, balance):
-        if balance < cls._minimum_balance:
+        if int(balance) < cls._minimum_balance:
             print(f"Saving account requires at least: {cls._minimum_balance}. Attempted to create with balance: {balance}")
             logging.error(f"Saving account requires at least: {cls._minimum_balance}. Attempted to create with balance: {balance}")
             raise ValueError("Initial balance cannot be negative.")
@@ -113,12 +111,14 @@ class BankAccount:
         
 class Customer:
     user_id_count = 0
+    all_customer =[]
     def __init__(self, name, birth_date):
         Customer.user_id_count +=1
         self._user_id_count = Customer.user_id_count
         self._name = name
         self._birth_date = birth_date
         self.__accounts = []
+        Customer.all_customer.append(self)                                     
 
     def validate_birth_date(self, birth_date):
         from datetime import date
@@ -138,25 +138,68 @@ class Customer:
     def get_total_balance(self):
         total = sum(account.balance for account in self.__accounts)
         logging.info(f"Total balance for user {self._name}: {total}")
-        print(f"Total balance for user 21 {self._name}: {total}")
+        print(f"Total balance for user: {self._name}: {total}")
         return total
-        
+    def get_account_number(self,name):
+        for customer in Customer.all_customers:
+            if customer._name == name:
+                return self.__accounts[0].account_number
+        return None
+    @classmethod
+    def find_customer_by_name(cls, name):
+        for customer in cls.all_customer:
+            if customer._name == name:
+                return customer
+        return None
+if __name__ == "__main__":
+    try:
+        while True:
+            print("\n            ***** BANKING SYSTEM *****")
+            print("              1. CREATE ACCOUNT")
+            print("              2. DEPOSIT")
+            print("              3. TRANSFER")
+            print("              4. WITHDRAW")
+            print("              5. VIEW BALANCE")
+            print("              6. EXIT")
 
-try:
-    account = BankAccount(100, 1000)
-    #account.deposit(500)
-    #account.balance = 50
-    #account.withdraw(50)
-    #account.convert_currency("EUR", 0.85)
-    user=Customer("John Doe", "2008-09-28")
-    user.validate_birth_date(date(2008,9,28))
-    account = BankAccount.create_saving(190)
-    user.add_account(account)
-    print(f"Account {account.account_number} created for user {user._name} with balance {account.balance}.")
-    print(f"Total balance for user {user._name}: {user.get_total_balance()}")
-   
-   
-except ValueError as e:
-    logging.error(f"Error: {e}") 
-print(account.balance)
-account.show_balance()
+            opcion = input("Option: ")
+
+            if opcion == "1":
+                print("             YOU HAVE SELECTED CREATE ACCOUNT!")
+                name = input("Add your name: ")
+                birth_date = input("Add your birth date (YYYY-MM-DD): ")
+                deposit=int(input("How much money do you want to deposit?: "))
+                user = Customer(name, birth_date)
+                account = BankAccount.create_saving(deposit)
+                user.add_account(account)
+                print(f"Account #{account._account_number} created for user: {user._name}.")
+            elif opcion == "2":
+                print("DEPOSIT")
+                #account.deposit(500)
+            elif opcion == "3":
+                print("TRANSFER")
+            elif opcion == "4":
+                print("WITHDRAW")
+                #account.withdraw(50)
+            elif opcion == "5":
+                print("              YOU HAVE SELECTED VIEW BALANCE!")
+    
+                name = input("Add your name: ")
+
+                for customer in Customer.all_customer:
+                    if customer._name == name:
+                        print(f"Balance: {customer.get_total_balance()}")
+                        break
+                else:
+                    print("Customer not found.")
+
+            elif opcion == "6":
+                break
+                #account.convert_currency("EUR", 0.85)
+                user=Customer("John Doe", "2008-09-28")
+                user.validate_birth_date(date(2008,9,28))
+                
+    except ValueError as e:
+            logging.error(f"Error: {e}") 
+            #print(account.balance)
+            #account.show_balance()
