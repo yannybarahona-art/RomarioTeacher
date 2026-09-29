@@ -77,19 +77,27 @@ class BankAccount:
     def withdraw(self, amount):
         if amount <=0:
             logging.error(f"The amount can't be negative {amount}")
-            raise ValueError("Withdrawal amount must be positive.")
+            print("              The amount can't be negative!")
+            input("\n              Press Enter to continue...")
+            return
+            #raise ValueError("Withdrawal amount must be positive.")
         if amount > self.__balance:
             logging.error(f"Insufficient funds for withdrawal: {amount}. Current balance: {self.__balance}")
+            print(f"              Insufficient funds for withdrawal: {amount}. Current balance: {self.__balance}")
             raise InsufficientFundsError("Insufficient funds for withdrawal.", amount)
+            input("\n              Press Enter to continue...")
+            return
         if self.__balance - amount < self._minimum_balance:
-            print(f"Withdrawal of {amount} would breach minimum balance. Current balance: {self.__balance}")
+            print(f"              Withdrawal of {amount} would breach minimum balance. Current balance: {self.__balance}")
             logging.error(f"Withdrawal would breach minimum balance. Attempted withdrawal: {amount}. Current balance: {self.__balance}")
-            raise ValueError("Withdrawal would breach minimum balance.")
+            input("\n              Press Enter to continue...")
+            return
+            #raise ValueError("Withdrawal would breach minimum balance.")
             
             
         self.__balance -=amount
         logging.info(f"Withdrew {amount}. New balance: {self.__balance}")
-        print(f"The amount {amount} has been withdrawn. New balance: {self.__balance}")                      
+        print(f"              The amount {amount} has been withdrawn. New balance: {self.__balance}")                      
     def convert_currency(self, target_currency, exchange_rate):
         if target_currency == self._currency:
             logging.info(f"Currency conversion not needed. Already in {self._currency}.")
@@ -119,7 +127,10 @@ class BankAccount:
 
         self.balance -= amount
         target_account.balance += amount
-        print("Transfer successfully...")
+        Customer.show_all_accounts()
+        print("              Transfer successfully...")
+        input("\n              Press Enter to continue...")
+
            
         
         
@@ -153,12 +164,15 @@ class Customer:
     def get_total_balance(self):
         total = sum(account.balance for account in self.__accounts)
         logging.info(f"Total balance for user {self._name}: {total}")
-        print(f"Total balance for user: {self._name}: {total}")
+        print(f"              The {self._name} balance is: {total}")
+        input("\n              Press Enter to continue...")
         return total
-    def get_account_number(self,name):
-        for customer in Customer.all_customers:
+
+    def get_account_by_name(self, name):
+        for customer in Customer.all_customer:
             if customer._name == name:
-                return self.__accounts[0].account_number
+                if customer._Customer__accounts:
+                    return customer._Customer__accounts[0]
         return None
     @classmethod
     def find_customer_by_name(cls, name):
@@ -166,13 +180,25 @@ class Customer:
             if customer._name == name:
                 return customer
         return None
+    @staticmethod
     def find_account(account_number):
         for customer in Customer.all_customer:
             for account in customer._Customer__accounts:
                 if account.account_number == account_number:
                     return account
         return None
+   
+    @classmethod
+    def show_all_accounts(cls):
+        for customer in cls.all_customer:
+            print(f"\nCustomer: {customer._name}")
 
+            for account in customer._Customer__accounts:
+                print(
+                    f"              Account: {account.account_number} | "
+                    f"Balance: {account.balance}"
+                )
+        input("\n              Press Enter to continue...")
     
 if __name__ == "__main__":
     try:
@@ -183,42 +209,28 @@ if __name__ == "__main__":
             print("              3. TRANSFER")
             print("              4. WITHDRAW")
             print("              5. VIEW BALANCE")
-            print("              6. EXIT")
+            print("              6. VIEW ALL ACCOUNTS AND BALANCE")
+            print("              7. EXIT")
 
-            opcion = input("Option: ")
+            opcion = input("              Option: ")
 
             if opcion == "1":
-                print("             YOU HAVE SELECTED CREATE ACCOUNT!")
-                name = input("Add your name: ")
-                birth_date = input("Add your birth date (YYYY-MM-DD): ")
-                deposit=int(input("How much money do you want to deposit?: "))
+                name = input("              Enter the name: ")
+                birth_date = input("              Enter the birth date (YYYY-MM-DD): ")
+                deposit=int(input("              How much money do you want to deposit?: "))
                 user = Customer(name, birth_date)
                 account = BankAccount.create_saving(deposit)
                 user.add_account(account)
-                print(f"Account #{account._account_number} created for user: {user._name}.")
+                print(f"              Account #{account._account_number} created for user: {user._name}.")
             elif opcion == "2":
-                print("DEPOSIT")
-                name = input("Add your name: ")
-                deposit=int(input("Add your deposit: "))
+                name = input("              Enter the name: ")
+                deposit=int(input("              Enter your deposit: "))
                 account.deposit(deposit)
+
             elif opcion == "3":
-                print("              YOU HAVE SELECTED TRANSFER!")
-                #name=input("Enter the user name: ")
-                #amount=int(input("Enter the amount to transfer: "))
-                #account_from=int(input("Enter the account from to transfer: "))
-                #account_target=int(input("Enter the account target to transfer: "))
-
-                #account1 = BankAccount(account_from)
-                #account_target = BankAccount(9876543210, 100)
-
-                #account1.transfer(account_target,100)
-                #print(f"New balance from :  {account1.balance}")
-                #print(f"New balance target :  {account_target.balance}")
-
-
-                account_from = int(input("Enter source account number: "))
-                account_target = int(input("Enter target account number: "))
-                amount = int(input("Enter amount: "))
+                account_from = int(input("              Enter source account number: "))
+                account_target = int(input("              Enter target account number: "))
+                amount = int(input("              Enter amount: "))
 
                 source_account = Customer.find_account(account_from)
                 target_account = Customer.find_account(account_target)
@@ -226,24 +238,36 @@ if __name__ == "__main__":
                 if source_account and target_account:
                     source_account.transfer(target_account, amount)
                 else:
-                    print("Account not found")
+                    print("              Account not found")
+                    input("\n              Press Enter to continue...")
 
             elif opcion == "4":
-                print("              YOU HAVE SELECTED WITHDRAW!")
-                withdraw=int(input("Please enter the withdraw: "))
-                account.withdraw(withdraw)
+                name=input("              Enter the name: ")
+                customer=Customer.find_customer_by_name(name)
+                if customer:
+                    account=customer._Customer__accounts[0]
+                    amount=int(input("              Please enter the withdraw: "))
+                    account.withdraw(amount)
+                    input("\n              Press Enter to continue...")
+
             elif opcion == "5":
-                print("              YOU HAVE SELECTED VIEW BALANCE!")
-                name = input("Add your name: ")
+                name = input("              Add your name: ")
                 for customer in Customer.all_customer:
                     if customer._name == name:
-                        print(f"Balance: {customer.get_total_balance()}")
+                        customer.get_total_balance()
                         break
                 else:
-                    print("Customer not found.")
+                    print("              Customer not found.")
+                    input("\n              Press Enter to continue...")
+
 
             elif opcion == "6":
-                print("BANKING SYSTEM EXISTING.....")
+                Customer.show_all_accounts()
+                input("\n              Press Enter to continue...")
+
+            elif opcion == "7":
+                print("              BANKING SYSTEM EXISTING.....")
+                input("\n              Press Enter to continue...")
                 break
                 #account.convert_currency("EUR", 0.85)
                 user=Customer("John Doe", "2008-09-28")
