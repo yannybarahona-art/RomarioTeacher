@@ -191,7 +191,7 @@ class Customer:
     @classmethod
     def show_all_accounts(cls):
         for customer in cls.all_customer:
-            print(f"\nCustomer: {customer._name}")
+            print(f"\n              Customer: {customer._name}")
 
             for account in customer._Customer__accounts:
                 print(
@@ -209,7 +209,7 @@ if __name__ == "__main__":
             print("              3. TRANSFER")
             print("              4. WITHDRAW")
             print("              5. VIEW BALANCE")
-            print("              6. VIEW ALL ACCOUNTS AND BALANCE")
+            print("              6. VIEW ALL ACCOUNTS AND BALANCE") # Bonus
             print("              7. EXIT")
 
             opcion = input("              Option: ")
